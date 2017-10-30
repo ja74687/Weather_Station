@@ -1,7 +1,11 @@
+#include <ArduinoJson.h>
 #include <VirtualWire.h>
 
 #define receive_pin 6
 
+int temp = 0;
+int humi = 0;
+float battery = 0.0;
 
 void setup()
 {
@@ -29,6 +33,18 @@ void receiveData() {
     {
       wiadomosc += char(buf[i]);
     }
+  //  char json[wiadomosc.length()];
+   // wiadomosc.toCharArray(json, wiadomosc.length());
+    StaticJsonBuffer<200> jsonBuffer;
+    JsonObject& root = jsonBuffer.parseObject(wiadomosc);
+    battery = root["battery"];
+    temp = root["temp"];
+    humi = root["humidity"];
+   // Serial.print(temp);
+   // Serial.print(" ");
+  //  Serial.print(humi);
+   // Serial.print(" ");
+    Serial.println(battery, 7);
     Serial.println(wiadomosc);
   }
 }
